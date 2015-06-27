@@ -35,13 +35,14 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   Form.create(req.body, function(err, form) {
     var nodemailer = require('nodemailer');
+    var wellknown = require('nodemailer-wellknown');
 
     // create reusable transporter object using SMTP transport
     var transporter = nodemailer.createTransport({
-        service: 'Gmail',
+        service: 'Yahoo',
         auth: {
-            user: 'barispalaska@gmail.com',
-            pass: 'Bp123967'
+            user: 'columnistsapp@yahoo.com',
+            pass: 'abcd123098'
         }
     });
 
@@ -73,7 +74,15 @@ exports.create = function(req, res) {
                   case "Cumhuriyet":
                     var articlehtml = $$('#article-body');
                     //console.log(par.html());
-                    articles = articles + articlehtml.html();
+                    if(articlehtml.html()){
+
+                      articles = articles + 
+                      '\n<p style="text-align: center;"><span class="large">- - - - -</span></p>\n' + 
+                      '<strong>'+ wris[i].name + '\n'+ wris[i].lastarticle + '</strong>\n' +
+                      articlehtml.html() +
+                      '\n<p style="text-align: center;"><span class="large">- - - - -</span></p>\n';
+                    }
+                    
                   break;
                 }
                 asynclooper(i+1,wris);
@@ -84,11 +93,11 @@ exports.create = function(req, res) {
         });
       } else {
           var mailOptions = {
-          from: 'Baris Palaska ✔ <barispalaska@gmail.com>', // sender address
+          from: 'Columnists ✔ <columnistsapp@yahoo.com>', // sender address
           to: req.body.emails, // list of receivers
           subject: 'Köşe Yazıları', // Subject line
-          text: 'Hello world ✔', // plaintext body
-          html: articles // html body
+          text: '----', // plaintext body
+          html: articles;
         }
 
         transporter.sendMail(mailOptions, function(error, info){

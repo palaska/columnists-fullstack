@@ -14,11 +14,11 @@
       <h3 class="page-header">Tüm Yazarlar</h3>
       <div class="input-group">
         <span class="input-group-addon" id="basic-addon1">Filtrele</span>
-        <input type="text" class="form-control" placeholder="Yazar adı veya gazete" aria-describedby="basic-addon1" ng-model="filterWriters">
+        <input type="text" class="form-control" placeholder="Yazar adı veya gazete" aria-describedby="basic-addon1" ng-model="query">
       </div>
       <div class="writercontainer">
-        <ul class="list-group col-md-4 col-lg-6 col-sm-4" ng-repeat="writer in allWriters | filter:filterWriters">
-          <a href="#" ng-class="{'active':selection.indexOf($index) != -1}" class="list-group-item" ng-click="toggle($index)" tooltip="">
+        <ul class="list-group col-md-4 col-lg-6 col-sm-4" ng-repeat="writer in (filteredWriters = (allWriters | orderBy: 'name' | filter:query))">
+          <a href="#" ng-class="{'active':selection.indexOf(allWriters.indexOf(filteredWriters[$index])) != -1}" class="list-group-item" ng-click="toggle($index)" tooltip="">
             <h5 class="list-group-item-heading">{{writer.name}} - {{writer.lastarticlesnewspaper}}</h5>
             <p class='list-group-item-text'>{{writer.lastarticle}}</p>
           </a>

@@ -5,9 +5,7 @@ angular.module('columnistsFullstackApp')
     $scope.allWriters = [];
 
     $http.get('/api/writers').success(function(allWriters) {
-      $scope.allWriters = allWriters.sort(function(a, b) {
-        return a.name.localeCompare(b.name);
-      });
+      $scope.allWriters = allWriters;
     });
 
     $scope.addWriter = function() {
@@ -22,21 +20,21 @@ angular.module('columnistsFullstackApp')
       $http.delete('/api/writers/' + writer._id);
     };
 
-    $scope.filterWriters = '';
+    $scope.query = '';
 
     $scope.selection = [];
     $scope.selectedWriters = [];
     
     $scope.toggle = function(idx){
-        var pos = $scope.selection.indexOf(idx);
+        var pos = $scope.selection.indexOf($scope.allWriters.indexOf($scope.filteredWriters[idx]));
         if (pos == -1) {
-            $scope.selection.push(idx);
-            $scope.selectedWriters.push($scope.allWriters[idx]);
+            $scope.selection.push($scope.allWriters.indexOf($scope.filteredWriters[idx]));
+            $scope.selectedWriters.push($scope.filteredWriters[idx]);
         } else {
             $scope.selection.splice(pos, 1);
             $scope.selectedWriters.splice(pos, 1);
         }
-        console.log($scope.selectedWriters);
+        console.log($scope.selection);
     };
 
     $scope.remove = function(idx){

@@ -15,20 +15,7 @@ rule.minute = [0,5,10,15,20,25,30,35,40,45,50,55];
 
 // Getting current date
 var j = schedule.scheduleJob(rule, function(){
-	var today = new Date(),
-		dd 	  = today.getDate(),
-		mm    = today.getMonth()+1,
-		yyyy  = today.getFullYear;
-
-	if(dd<10) {
-		dd='0'+dd;
-	} 
-
-	if(mm<10) {
-	    mm='0'+mm;
-	}
-
-	today = dd + '.' + mm + '.' + yyyy;
+	var today = new Date().toJSON().slice(0,10);
 
     Writer.find({}).lean().exec(function (err, dbwriters) {
 		Article.find({}).lean().exec(function(err, dbarticles){

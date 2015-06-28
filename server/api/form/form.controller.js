@@ -78,7 +78,8 @@ exports.create = function(req, res) {
 
                       articles = articles + 
                       '\n<p style="text-align: center;"><span class="large">- - - - -</span></p>\n' + 
-                      '<strong>'+ wris[i].name + '\n'+ wris[i].lastarticle + '</strong>\n' +
+                      '<h4>'+ wris[i].name + '</h4>\n' +
+                      '<strong>'+ wris[i].lastarticle + '</strong>\n' +
                       articlehtml.html() +
                       '\n<p style="text-align: center;"><span class="large">- - - - -</span></p>\n';
                     }
@@ -97,7 +98,7 @@ exports.create = function(req, res) {
           to: req.body.emails, // list of receivers
           subject: 'Köşe Yazıları', // Subject line
           text: '----', // plaintext body
-          html: articles;
+          html: articles
         }
 
         transporter.sendMail(mailOptions, function(error, info){

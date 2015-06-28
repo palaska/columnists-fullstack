@@ -35,7 +35,6 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   Form.create(req.body, function(err, form) {
     var nodemailer = require('nodemailer');
-    var wellknown = require('nodemailer-wellknown');
 
     // create reusable transporter object using SMTP transport
     var transporter = nodemailer.createTransport({
@@ -46,15 +45,10 @@ exports.create = function(req, res) {
         }
     });
 
-    // NB! No need to recreate the transporter object. You can use
-    // the same transporter object for all e-mails
-
-    // setup e-mail data with unicode symbols
 
     if(err) { return handleError(res, err); }
     var writers    = req.body.writers,
-        //articles   = Array.apply(null, Array(writers.length)).map(String.prototype.valueOf,"No article found!");
-        articles = "";
+        articles   = "";
 
     function asynclooper(i, wris) {
       var request = require('request'),
@@ -73,17 +67,14 @@ exports.create = function(req, res) {
                 
                   case "Cumhuriyet":
                     var articlehtml = $$('#article-body');
-                    //console.log(par.html());
                     if(articlehtml.html()){
-
                       articles = articles + 
                       '\n<p style="text-align: center;"><span class="large">- - - - -</span></p>\n' + 
-                      '<h4>'+ wris[i].name + '</h4>\n' +
+                      '<h3>'+ wris[i].name + '</h3>\n' +
                       '<strong>'+ wris[i].lastarticle + '</strong>\n' +
                       articlehtml.html() +
                       '\n<p style="text-align: center;"><span class="large">- - - - -</span></p>\n';
-                    }
-                    
+                    }        
                   break;
                 }
                 asynclooper(i+1,wris);

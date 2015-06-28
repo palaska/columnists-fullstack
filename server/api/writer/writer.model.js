@@ -9,7 +9,8 @@ var WriterSchema = new Schema({
   articles: [String],
   lastarticle: String,
   lastarticlesnewspaper: String,
-  lastarticleslink: String
+  lastarticleslink: String,
+  lastarticlesdate: String
 });
 
 module.exports = mongoose.model('Writer', WriterSchema);

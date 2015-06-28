@@ -69,11 +69,12 @@ exports.create = function(req, res) {
                     var articlehtml = $$('#article-body');
                     if(articlehtml.html()){
                       articles = articles + 
-                      '\n<p style="text-align: center;"><span class="large">- - - - -</span></p>\n' + 
-                      '<h3>'+ wris[i].name + '</h3>\n' +
-                      '<strong>'+ wris[i].lastarticle + '</strong>\n' +
+                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                      '<h2>'+ wris[i].name + ' - '+'Cumhuriyet'+'</h2>\n' +
+                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
                       articlehtml.html() +
-                      '\n<p style="text-align: center;"><span class="large">- - - - -</span></p>\n';
+                      '</div>'+
+                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
                     }        
                   break;
                 }
@@ -85,10 +86,10 @@ exports.create = function(req, res) {
         });
       } else {
           var mailOptions = {
-          from: 'Columnists ✔ <columnistsapp@yahoo.com>', // sender address
+          from: '✤ Columnists ✤ <columnistsapp@yahoo.com>', // sender address
           to: req.body.emails, // list of receivers
           subject: 'Köşe Yazıları', // Subject line
-          text: '----', // plaintext body
+          text: '', // plaintext body
           html: articles
         }
 

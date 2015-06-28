@@ -43,16 +43,16 @@ var j = schedule.scheduleJob(rule, function(){
 											 "lastarticlesdate":today
 											};
 
-						var includesWriter = false;
-						var includesArticle = false;
+						var notIncludesWriter = 0;
+						var notIncludesArticle = 0;
 
 						for(var i=0;i<dbwriters.length;i++){
-							if(dbwriters[i].name == writer){
-								includesWriter = true;
+							if(dbwriters[i].name != writer){
+								notIncludesWriter ++;
 							}
 						}
 
-						if(!includesWriter){
+						if(notIncludesWriter == dbwriters.length){
 							console.log("!!!DEBUG: Creating new Writer and Article!");
 							Writer.create(currentWriter, function(err, wri){
 								Article.create(currentArticle,function(err, art){
@@ -63,12 +63,12 @@ var j = schedule.scheduleJob(rule, function(){
 						} else {
 						
 							for(var i=0;i<dbarticles.length;i++){
-								if(dbarticles[i].title == articletitle){
-									includesArticle = true;
+								if(dbarticles[i].title != articletitle){
+									notIncludesArticle ++;
 								}
 							}
 
-							if(!includesArticle){
+							if(notIncludesArticle = dbarticles.length){
 								console.log("!!!DEBUG: Creating new Article!");
 								Article.create(currentArticle, function(err, art){
 									if(err) { return handleError(res, err); }

@@ -37,6 +37,11 @@ angular.module('columnistsFullstackApp')
         console.log($scope.selectedWriters);
     };
 
+    $scope.remove = function(idx){
+        $scope.selection.splice(idx,1);
+        $scope.selectedWriters.splice(idx,1);
+    };
+
     $scope.pressSend = function(){
       console.log("pressSend");
       if($scope.emailaddress && $scope.selectedWriters.length != 0){

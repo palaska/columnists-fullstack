@@ -12,6 +12,10 @@
   <div class="row">
     <div class="col-lg-9">
       <h3 class="page-header">Tüm Yazarlar</h3>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">Filtrele</span>
+        <input type="text" class="form-control" placeholder="Yazar adı veya gazete" aria-describedby="basic-addon1">
+      </div>
       <div class="writercontainer">
         <ul class="list-group col-md-4 col-lg-6 col-sm-4" ng-repeat="writer in allWriters">
           <a href="#" ng-class="{'active':selection.indexOf($index) != -1}" class="list-group-item" ng-click="toggle($index)" tooltip="">
@@ -23,9 +27,9 @@
     </div>
     <div class="col-lg-3">
       <h3 class="page-header">Seçilen Yazarlar</h3>
-      <div class="writercontainer">
+      <div class="writercontainer2">
         <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-12 col-sm-4" ng-repeat="selectedwriter in selectedWriters">
-          <li><h5>{{selectedwriter.name}} - {{selectedwriter.lastarticlesnewspaper}}</h4></li>
+          <li><h5>{{selectedwriter.name}} - {{selectedwriter.lastarticlesnewspaper}} <a href="#" class='glyphicon glyphicon-remove removeselectedicon' ng-click='remove($index)'></a></h5></li>
         </ul>
       </div>
     </div>

@@ -36,7 +36,6 @@ var j = schedule.scheduleJob(rule, function(){
 											  "newspaper":newspaper};
 
 						var currentWriter = {"name":writer,
-											 "active":true,
 											 "articles":[],
 											 "lastarticle":articletitle,
 											 "lastarticlesnewspaper":newspaper,

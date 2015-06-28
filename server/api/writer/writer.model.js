@@ -5,7 +5,6 @@ var mongoose = require('mongoose'),
 
 var WriterSchema = new Schema({
   name: String,
-  active: Boolean,
   articles: [String],
   lastarticle: String,
   lastarticlesnewspaper: String,

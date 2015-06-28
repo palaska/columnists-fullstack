@@ -22,6 +22,8 @@ angular.module('columnistsFullstackApp')
       $http.delete('/api/writers/' + writer._id);
     };
 
+    $scope.filterWriters = '';
+
     $scope.selection = [];
     $scope.selectedWriters = [];
     

@@ -76,3 +76,19 @@
     text-decoration: none;
 }
 
+.updatedicon {
+    color: #090;
+    position: absolute;
+    left:94%;
+    top:35%;
+    visibility: hidden;
+}
+
+.updatedicon.updated {
+    visibility: visible;
+}
+
+.page-header {
+    margin-top: 20px;
+}
+

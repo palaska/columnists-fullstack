@@ -3,9 +3,15 @@
 angular.module('columnistsFullstackApp')
   .controller('MainCtrl', function ($scope, $http) {
     $scope.allWriters = [];
+    $scope.today = new Date().toJSON().slice(0,10);
 
     $http.get('/api/writers').success(function(allWriters) {
       $scope.allWriters = allWriters;
+      for(var i=0;i<$scope.allWriters.length;i++){
+        if($scope.today == $scope.allWriters[i].lastarticlesdate ){
+          $scope.allWriters[i].isUpdated = "updated";
+        }
+      }
     });
 
     $scope.addWriter = function() {

@@ -19,7 +19,7 @@
       <div class="writercontainer">
         <ul class="list-group col-md-4 col-lg-6 col-sm-4" ng-repeat="writer in (filteredWriters = (allWriters | orderBy: 'name' | filter:query))">
           <a href="#" ng-class="{'active':selection.indexOf(allWriters.indexOf(filteredWriters[$index])) != -1}" class="list-group-item" ng-click="toggle($index)" tooltip="">
-            <h5 class="list-group-item-heading">{{writer.name}} - {{writer.lastarticlesnewspaper}}</h5>
+            <h5 class="list-group-item-heading">{{writer.name}} - {{writer.lastarticlesnewspaper}}<text class='updatedicon ng-class:writer.isUpdated'>&#10020</text></h5>
             <p class='list-group-item-text'>{{writer.lastarticle}}</p>
           </a>
         </ul>
@@ -36,7 +36,8 @@
   </div>
 </div>
 
-<div class="col-lg-6 col-md-offset-3">
+ <div class="row"> 
+  <div class="col-lg-6 col-md-offset-3">
     <div class="input-group">
       <input ng-model="emailaddress" type="text" class="form-control" placeholder="E-mail adresi girin..">
       <span class="input-group-btn">
@@ -44,7 +45,13 @@
       </span>
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
-</div><!-- /.row -->
+</div>
+
+<div class="row">
+  <div class="col-lg-11 col-md-offset-1">
+    <h5 class="page-header"><small>* Yazar isimlerinin yanındaki &#10020 işaretleri, yazarın bugün güncel yazısının bulunduğunu göstermektedir. </small></h5>
+  </div>
+</div>
 
 
 <footer class="footer">

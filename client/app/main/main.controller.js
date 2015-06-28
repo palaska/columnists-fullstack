@@ -10,6 +10,8 @@ angular.module('columnistsFullstackApp')
       for(var i=0;i<$scope.allWriters.length;i++){
         if($scope.today == $scope.allWriters[i].lastarticlesdate ){
           $scope.allWriters[i].isUpdated = "updated";
+        } else {
+          $scope.allWriters[i].isUpdated = "";
         }
       }
     });

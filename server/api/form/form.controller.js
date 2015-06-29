@@ -66,16 +66,29 @@ exports.create = function(req, res) {
                 switch(newspaper) {
                 
                   case "Cumhuriyet":
-                    var articlehtml = $$('#article-body');
-                    if(articlehtml.html()){
+                    var articlehtml = $$('#article-body').html();
+                    if(articlehtml){
                       articles = articles + 
                       '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
                       '<h2>'+ wris[i].name + ' - '+'Cumhuriyet'+'</h2>\n' +
                       '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                      articlehtml.html() +
+                      articlehtml +
                       '</div>'+
                       '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
                     }        
+                  break;
+
+                  case "Habertürk":
+                    var articlehtml = $$('.news-content-text').html();
+                    if(articlehtml){
+                      articles = articles + 
+                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                      '<h2>'+ wris[i].name + ' - '+'Habertürk'+'</h2>\n' +
+                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+                      articlehtml +
+                      '</div>'+
+                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    }
                   break;
                 }
                 asynclooper(i+1,wris);

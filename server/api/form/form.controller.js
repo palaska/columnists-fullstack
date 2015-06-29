@@ -105,6 +105,20 @@ exports.create = function(req, res) {
                     }
                   break;
 
+                  case "Milliyet":
+                    var articlehtml = $$('#divAdnetKeyword3').html();
+                    console.log(articlehtml);
+                    if(articlehtml){
+                      articles = articles + 
+                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                      '<h2>'+ wris[i].name + ' - '+'Milliyet'+'</h2>\n' +
+                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+                      articlehtml +
+                      '</div>'+
+                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    }
+                  break;
+
                 }
                 asynclooper(i+1,wris);
               }
@@ -121,6 +135,7 @@ exports.create = function(req, res) {
           html: articles
         }
 
+
         transporter.sendMail(mailOptions, function(error, info){
           if(error){
             console.log(error);
@@ -129,6 +144,8 @@ exports.create = function(req, res) {
             console.log(mailOptions);
           }
         });
+
+
       }
     }
     asynclooper(0,writers);

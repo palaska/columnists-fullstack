@@ -11,7 +11,7 @@ var request    = require('request'),
 // Update DB with new Writers/Articles
 
 var rule = new schedule.RecurrenceRule();
-rule.minute = [0,5,10,15,20,25,30,35,40,45,50,55];
+rule.minute = [0,2,3,5,10,15,20,25,30,35,40,45,50,55];
 
 // Getting current date
 var j = schedule.scheduleJob(rule, function(){
@@ -68,7 +68,7 @@ var j = schedule.scheduleJob(rule, function(){
 								}
 							}
 
-							if(notIncludesArticle = dbarticles.length){
+							if(notIncludesArticle == dbarticles.length){
 								console.log("!!!DEBUG: Creating new Article!");
 								Article.create(currentArticle, function(err, art){
 									if(err) { return handleError(res, err); }

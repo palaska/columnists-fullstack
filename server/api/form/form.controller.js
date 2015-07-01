@@ -57,12 +57,14 @@ exports.create = function(req, res) {
         var newspaper = wris[i].lastarticlesnewspaper;
         request('http://' + wris[i].lastarticleslink, function (err, res, body) {
           if (!err && res.statusCode == 200) {
+            console.log(body);
+            console.log();
             var $ = cheerio.load(body);
             var reallink = $('a.ypDevam')[0].attribs.href;
             request(reallink, function (err, res, body){
               if (!err && res.statusCode == 200) {
                 var $$ = cheerio.load(body);
-                //console.log('$$:' + $$);
+                console.log('NEWSPAPER:'+newspaper);
                 switch(newspaper) {
                 
                   case "Cumhuriyet":
@@ -93,7 +95,6 @@ exports.create = function(req, res) {
 
                   case "Vatan":
                     var articlehtml = $$('#divAdnetKeyword').html();
-                    console.log(articlehtml);
                     if(articlehtml){
                       articles = articles + 
                       '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
@@ -107,11 +108,37 @@ exports.create = function(req, res) {
 
                   case "Milliyet":
                     var articlehtml = $$('#divAdnetKeyword3').html();
-                    console.log(articlehtml);
                     if(articlehtml){
                       articles = articles + 
                       '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
                       '<h2>'+ wris[i].name + ' - '+'Milliyet'+'</h2>\n' +
+                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+                      articlehtml +
+                      '</div>'+
+                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    }
+                  break;
+
+                  // case "Akşam":
+                  //   var articlehtml = $$('.double-wide').html();
+                  //   console.log(articlehtml);
+                  //   if(articlehtml){
+                  //     articles = articles +
+                  //     '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                  //     '<h2>'+ wris[i].name + ' - '+'Akşam'+'</h2>\n' +
+                  //     '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+                  //     articlehtml +
+                  //     '</div>'+
+                  //     '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                  //   }
+                  // break;
+
+                  case "Sözcü":
+                    var articlehtml = $$('.content').html();
+                    if(articlehtml){
+                      articles = articles + 
+                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                      '<h2>'+ wris[i].name + ' - '+'Sözcü'+'</h2>\n' +
                       '<h3>'+ wris[i].lastarticle + '</h3>\n' +
                       articlehtml +
                       '</div>'+

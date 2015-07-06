@@ -142,6 +142,31 @@ exports.create = function(req, res) {
                     }
                   break;
 
+                  case "T24":
+                    var articlehtml = $$('.right').html();
+                    if(articlehtml){
+                      articles = articles + 
+                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                      '<h2>'+ wris[i].name + ' - '+'T24'+'</h2>\n' +
+                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+                      articlehtml +
+                      '</div>'+
+                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    }
+                  break;
+
+                  case "Bugün":
+                    var articlehtml = $$('.yazarArticleBody').html();
+                    if(articlehtml){
+                      articles = articles + 
+                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                      '<h2>'+ wris[i].name + ' - '+'Bugün'+'</h2>\n' +
+                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+                      articlehtml +
+                      '</div>'+
+                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    }
+                  break;
 									/*
 									 *case "Akşam":
 									 *  var articlehtml = $$('.double-wide').html();

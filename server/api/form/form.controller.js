@@ -57,14 +57,11 @@ exports.create = function(req, res) {
         var newspaper = wris[i].lastarticlesnewspaper;
         request('http://' + wris[i].lastarticleslink, function (err, res, body) {
           if (!err && res.statusCode == 200) {
-            console.log(body);
-            console.log();
             var $ = cheerio.load(body);
             var reallink = $('a.ypDevam')[0].attribs.href;
             request(reallink, function (err, res, body){
               if (!err && res.statusCode == 200) {
                 var $$ = cheerio.load(body);
-                console.log('NEWSPAPER:'+newspaper);
                 switch(newspaper) {
                 
                   case "Cumhuriyet":
@@ -119,20 +116,6 @@ exports.create = function(req, res) {
                     }
                   break;
 
-                  // case "Akşam":
-                  //   var articlehtml = $$('.double-wide').html();
-                  //   console.log(articlehtml);
-                  //   if(articlehtml){
-                  //     articles = articles +
-                  //     '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-                  //     '<h2>'+ wris[i].name + ' - '+'Akşam'+'</h2>\n' +
-                  //     '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                  //     articlehtml +
-                  //     '</div>'+
-                  //     '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
-                  //   }
-                  // break;
-
                   case "Sözcü":
                     var articlehtml = $$('.content').html();
                     if(articlehtml){
@@ -145,7 +128,50 @@ exports.create = function(req, res) {
                       '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
                     }
                   break;
+                  
+									case "Zaman":
+                    var articlehtml = $$('span[itemprop="articleBody"]').html();
+                    if(articlehtml){
+                      articles = articles + 
+                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                      '<h2>'+ wris[i].name + ' - '+'Zaman'+'</h2>\n' +
+                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+                      articlehtml +
+                      '</div>'+
+                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    }
+                  break;
 
+									/*
+									 *case "Akşam":
+									 *  var articlehtml = $$('.double-wide').html();
+									 *  console.log(articlehtml);
+									 *  if(articlehtml){
+									 *    articles = articles +
+									 *    '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+									 *    '<h2>'+ wris[i].name + ' - '+'Akşam'+'</h2>\n' +
+									 *    '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+									 *    articlehtml +
+									 *    '</div>'+
+									 *    '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+									 *  }
+									 *break;
+									 */
+
+									/*
+									 *case "Star":
+                   *  var articlehtml = $$('#detaytext').html();
+                   *  if(articlehtml){
+                   *    articles = articles + 
+                   *    '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                   *    '<h2>'+ wris[i].name + ' - '+'Star'+'</h2>\n' +
+                   *    '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+                   *    articlehtml +
+                   *    '</div>'+
+                   *    '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                   *  }
+                   *break;
+									 */
                 }
                 asynclooper(i+1,wris);
               }
@@ -163,14 +189,14 @@ exports.create = function(req, res) {
         }
 
 
-        transporter.sendMail(mailOptions, function(error, info){
-          if(error){
-            console.log(error);
-          }else{
-            console.log('Message sent: ' + info.response);
-            console.log(mailOptions);
-          }
-        });
+				transporter.sendMail(mailOptions, function(error, info){
+					if(error){
+						console.log(error);
+					}else{
+						console.log('Message sent: ' + info.response);
+						console.log(mailOptions);
+					}
+				});
 
 
       }

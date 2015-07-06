@@ -3,10 +3,10 @@
 var schedule = require('node-schedule');
 
 var Writer = require('../api/writer/writer.model'),
-	Article = require('../api/article/article.model');
+	 Article = require('../api/article/article.model');
 
 var request    = require('request'),
-	cheerio    = require('cheerio');
+  	cheerio    = require('cheerio');
 
 // Update DB with new Writers/Articles
 

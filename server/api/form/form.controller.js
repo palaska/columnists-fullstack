@@ -14,17 +14,23 @@ var Form = require('./form.model');
 
 // Get list of forms
 exports.index = function(req, res) {
-  Form.find(function (err, forms) {
-    if(err) { return handleError(res, err); }
+  Form.find(function(err, forms) {
+    if (err) {
+      return handleError(res, err);
+    }
     return res.json(200, forms);
   });
 };
 
 // Get a single Form
 exports.show = function(req, res) {
-  Form.findById(req.params.id, function (err, form) {
-    if(err) { return handleError(res, err); }
-    if(!form) { return res.send(404); }
+  Form.findById(req.params.id, function(err, form) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!form) {
+      return res.send(404);
+    }
     return res.json(form);
   });
 };
@@ -38,174 +44,191 @@ exports.create = function(req, res) {
 
     // create reusable transporter object using SMTP transport
     var transporter = nodemailer.createTransport({
-        service: 'Yahoo',
-        auth: {
-            user: 'columnistsapp@yahoo.com',
-            pass: 'abcd123098'
-        }
+      service: 'Yahoo',
+      auth: {
+        user: 'columnistsapp@yahoo.com',
+        pass: 'abcd123098'
+      }
     });
 
 
-    if(err) { return handleError(res, err); }
-    var writers    = req.body.writers,
-        articles   = "";
+    if (err) {
+      return handleError(res, err);
+    }
+    var writers = req.body.writers,
+      articles = "";
 
     function asynclooper(i, wris) {
       var request = require('request'),
-          cheerio = require('cheerio');
-      if(i < wris.length ) {
+        cheerio = require('cheerio');
+      if (i < wris.length) {
         var newspaper = wris[i].lastarticlesnewspaper;
-        request('http://' + wris[i].lastarticleslink, function (err, res, body) {
+        request('http://' + wris[i].lastarticleslink, function(err, res, body) {
           if (!err && res.statusCode == 200) {
             var $ = cheerio.load(body);
             var reallink = $('a.ypDevam')[0].attribs.href;
-            request(reallink, function (err, res, body){
+            request(reallink, function(err, res, body) {
               if (!err && res.statusCode == 200) {
                 var $$ = cheerio.load(body);
-                switch(newspaper) {
-                
+                switch (newspaper) {
+
                   case "Cumhuriyet":
                     var articlehtml = $$('#article-body').html();
-                    if(articlehtml){
-                      articles = articles + 
-                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-                      '<h2>'+ wris[i].name + ' - '+'Cumhuriyet'+'</h2>\n' +
-                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                      articlehtml +
-                      '</div>'+
-                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
-                    }        
-                  break;
+                    if (articlehtml) {
+                      articles = articles +
+                        '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                        '<h2>' + wris[i].name + ' - ' + 'Cumhuriyet' + '</h2>\n' +
+                        '<h3>' + wris[i].lastarticle + '</h3>\n' +
+                        articlehtml +
+                        '</div>' +
+                        '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    }
+                    break;
+                  
+									case "Hürriyet":
+                    if (body) {
+											var startIndex = body.search('\"aContent\"')+13;
+											var endIndex = body.search("\"userData\"")-50;
+											var articlehtml = body.substr(startIndex, endIndex - startIndex);
+                      articles = articles +
+                        '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                        '<h2>' + wris[i].name + ' - ' + 'Hürriyet' + '</h2>\n' +
+                        '<h3>' + wris[i].lastarticle + '</h3>\n' +
+                        articlehtml +
+                        '</div>' +
+                        '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    }
+                    break;
 
                   case "Habertürk":
                     var articlehtml = $$('.news-content-text').html();
-                    if(articlehtml){
-                      articles = articles + 
-                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-                      '<h2>'+ wris[i].name + ' - '+'Habertürk'+'</h2>\n' +
-                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                      articlehtml +
-                      '</div>'+
-                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    if (articlehtml) {
+                      articles = articles +
+                        '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                        '<h2>' + wris[i].name + ' - ' + 'Habertürk' + '</h2>\n' +
+                        '<h3>' + wris[i].lastarticle + '</h3>\n' +
+                        articlehtml +
+                        '</div>' +
+                        '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
                     }
-                  break;
+                    break;
 
                   case "Vatan":
                     var articlehtml = $$('#divAdnetKeyword').html();
-                    if(articlehtml){
-                      articles = articles + 
-                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-                      '<h2>'+ wris[i].name + ' - '+'Vatan'+'</h2>\n' +
-                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                      articlehtml +
-                      '</div>'+
-                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    if (articlehtml) {
+                      articles = articles +
+                        '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                        '<h2>' + wris[i].name + ' - ' + 'Vatan' + '</h2>\n' +
+                        '<h3>' + wris[i].lastarticle + '</h3>\n' +
+                        articlehtml +
+                        '</div>' +
+                        '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
                     }
-                  break;
+                    break;
 
                   case "Milliyet":
                     var articlehtml = $$('#divAdnetKeyword3').html();
-                    if(articlehtml){
-                      articles = articles + 
-                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-                      '<h2>'+ wris[i].name + ' - '+'Milliyet'+'</h2>\n' +
-                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                      articlehtml +
-                      '</div>'+
-                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    if (articlehtml) {
+                      articles = articles +
+                        '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                        '<h2>' + wris[i].name + ' - ' + 'Milliyet' + '</h2>\n' +
+                        '<h3>' + wris[i].lastarticle + '</h3>\n' +
+                        articlehtml +
+                        '</div>' +
+                        '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
                     }
-                  break;
+                    break;
 
                   case "Sözcü":
                     var articlehtml = $$('.content').html();
-                    if(articlehtml){
-                      articles = articles + 
-                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-                      '<h2>'+ wris[i].name + ' - '+'Sözcü'+'</h2>\n' +
-                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                      articlehtml +
-                      '</div>'+
-                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    if (articlehtml) {
+                      articles = articles +
+                        '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                        '<h2>' + wris[i].name + ' - ' + 'Sözcü' + '</h2>\n' +
+                        '<h3>' + wris[i].lastarticle + '</h3>\n' +
+                        articlehtml +
+                        '</div>' +
+                        '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
                     }
-                  break;
-                  
-									case "Zaman":
+                    break;
+
+                  case "Zaman":
                     var articlehtml = $$('span[itemprop="articleBody"]').html();
-                    if(articlehtml){
-                      articles = articles + 
-                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-                      '<h2>'+ wris[i].name + ' - '+'Zaman'+'</h2>\n' +
-                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                      articlehtml +
-                      '</div>'+
-                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    if (articlehtml) {
+                      articles = articles +
+                        '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                        '<h2>' + wris[i].name + ' - ' + 'Zaman' + '</h2>\n' +
+                        '<h3>' + wris[i].lastarticle + '</h3>\n' +
+                        articlehtml +
+                        '</div>' +
+                        '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
                     }
-                  break;
+                    break;
 
                   case "T24":
                     var articlehtml = $$('.right').html();
-                    if(articlehtml){
-                      articles = articles + 
-                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-                      '<h2>'+ wris[i].name + ' - '+'T24'+'</h2>\n' +
-                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                      articlehtml +
-                      '</div>'+
-                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    if (articlehtml) {
+                      articles = articles +
+                        '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                        '<h2>' + wris[i].name + ' - ' + 'T24' + '</h2>\n' +
+                        '<h3>' + wris[i].lastarticle + '</h3>\n' +
+                        articlehtml +
+                        '</div>' +
+                        '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
                     }
-                  break;
+                    break;
 
                   case "Bugün":
                     var articlehtml = $$('.yazarArticleBody').html();
-                    if(articlehtml){
-                      articles = articles + 
-                      '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-                      '<h2>'+ wris[i].name + ' - '+'Bugün'+'</h2>\n' +
-                      '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                      articlehtml +
-                      '</div>'+
-                      '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                    if (articlehtml) {
+                      articles = articles +
+                        '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                        '<h2>' + wris[i].name + ' - ' + 'Bugün' + '</h2>\n' +
+                        '<h3>' + wris[i].lastarticle + '</h3>\n' +
+                        articlehtml +
+                        '</div>' +
+                        '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
                     }
-                  break;
-									/*
-									 *case "Akşam":
-									 *  var articlehtml = $$('.double-wide').html();
-									 *  console.log(articlehtml);
-									 *  if(articlehtml){
-									 *    articles = articles +
-									 *    '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-									 *    '<h2>'+ wris[i].name + ' - '+'Akşam'+'</h2>\n' +
-									 *    '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-									 *    articlehtml +
-									 *    '</div>'+
-									 *    '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
-									 *  }
-									 *break;
-									 */
+                    break;
+                    /*
+                     *case "Akşam":
+                     *  var articlehtml = $$('.double-wide').html();
+                     *  console.log(articlehtml);
+                     *  if(articlehtml){
+                     *    articles = articles +
+                     *    '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                     *    '<h2>'+ wris[i].name + ' - '+'Akşam'+'</h2>\n' +
+                     *    '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+                     *    articlehtml +
+                     *    '</div>'+
+                     *    '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                     *  }
+                     *break;
+                     */
 
-									/*
-									 *case "Star":
-                   *  var articlehtml = $$('#detaytext').html();
-                   *  if(articlehtml){
-                   *    articles = articles + 
-                   *    '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
-                   *    '<h2>'+ wris[i].name + ' - '+'Star'+'</h2>\n' +
-                   *    '<h3>'+ wris[i].lastarticle + '</h3>\n' +
-                   *    articlehtml +
-                   *    '</div>'+
-                   *    '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
-                   *  }
-                   *break;
-									 */
+                    /*
+                     *case "Star":
+                     *  var articlehtml = $$('#detaytext').html();
+                     *  if(articlehtml){
+                     *    articles = articles +
+                     *    '<div style="padding:10px;border-color:#8AC007;border-style:solid;border-width:2px;border-radius: 5px;">' +
+                     *    '<h2>'+ wris[i].name + ' - '+'Star'+'</h2>\n' +
+                     *    '<h3>'+ wris[i].lastarticle + '</h3>\n' +
+                     *    articlehtml +
+                     *    '</div>'+
+                     *    '\n<p style="text-align: center;"><span class="large">-- -- --</span></p>\n';
+                     *  }
+                     *break;
+                     */
                 }
-                asynclooper(i+1,wris);
+                asynclooper(i + 1, wris);
               }
-            });        
+            });
           }
-      //return res.json(201, form);
+          //return res.json(201, form);
         });
       } else {
-          var mailOptions = {
+        var mailOptions = {
           from: '✤ Columnists ✤ <columnistsapp@yahoo.com>', // sender address
           to: req.body.emails, // list of receivers
           subject: 'Köşe Yazıları', // Subject line
@@ -214,10 +237,10 @@ exports.create = function(req, res) {
         }
 
 
-				transporter.sendMail(mailOptions, function(error, info){
-					if(error){
+				transporter.sendMail(mailOptions, function(error, info) {
+					if (error) {
 						console.log(error);
-					}else{
+					} else {
 						console.log('Message sent: ' + info.response);
 						console.log(mailOptions);
 					}
@@ -226,7 +249,7 @@ exports.create = function(req, res) {
 
       }
     }
-    asynclooper(0,writers);
+    asynclooper(0, writers);
 
   });
 };
@@ -234,13 +257,21 @@ exports.create = function(req, res) {
 
 // Updates an existing form in the DB.
 exports.update = function(req, res) {
-  if(req.body._id) { delete req.body._id; }
-  Form.findById(req.params.id, function (err, form) {
-    if (err) { return handleError(res, err); }
-    if(!form) { return res.send(404); }
+  if (req.body._id) {
+    delete req.body._id;
+  }
+  Form.findById(req.params.id, function(err, form) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!form) {
+      return res.send(404);
+    }
     var updated = _.merge(form, req.body);
-    updated.save(function (err) {
-      if (err) { return handleError(res, err); }
+    updated.save(function(err) {
+      if (err) {
+        return handleError(res, err);
+      }
       return res.json(200, form);
     });
   });
@@ -248,11 +279,17 @@ exports.update = function(req, res) {
 
 // Deletes a form from the DB.
 exports.destroy = function(req, res) {
-  Form.findById(req.params.id, function (err, form) {
-    if(err) { return handleError(res, err); }
-    if(!form) { return res.send(404); }
+  Form.findById(req.params.id, function(err, form) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!form) {
+      return res.send(404);
+    }
     form.remove(function(err) {
-      if(err) { return handleError(res, err); }
+      if (err) {
+        return handleError(res, err);
+      }
       return res.send(204);
     });
   });
